@@ -1,6 +1,6 @@
 # ⚡ Praveen Murugan — Cyberpunk Portfolio
 
-> **Live:** [0xpr4v33n.github.io/pfo](https://0xpr4v33n.github.io/pfo/)
+> **Live:** [0xpr4v33n.github.io/pfo](https://0xpr4v33n.github.io/portfolio/)
 
 A scroll-reactive, fully-animated personal portfolio for **Praveenkumar Murugan** — Senior Cybersecurity Consultant @ LTIMindtree. Built as a single-page static site with zero dependencies, zero build step, zero framework.
 
