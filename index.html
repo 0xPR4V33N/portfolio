@@ -3203,10 +3203,15 @@ glowCards.forEach(card => {
   if (!btn) return;
   let ctx, master, on = false, oscA, oscB, oscC, lfo, lfoGain, noise, noiseGain, filter;
 
-  function start(){
-    ctx = new (window.AudioContext || window.webkitAudioContext)();
-    master = ctx.createGain(); master.gain.value = 0;
-    master.connect(ctx.destination);
+async function start(){
+    try {
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      // CRITICAL: Resume context (Chrome autoplay policy)
+      if (ctx.state === 'suspended') {
+        await ctx.resume();
+      }
+      master = ctx.createGain(); master.gain.value = 0;
+      master.connect(ctx.destination);
 
     // 3-layer low ambient drone
     oscA = ctx.createOscillator(); oscA.type = 'sine'; oscA.frequency.value = 55;
@@ -3246,12 +3251,24 @@ glowCards.forEach(card => {
     master.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.8);
     setTimeout(() => { ctx.close(); ctx = null; }, 900);
   }
-  btn.addEventListener('click', () => {
+btn.addEventListener('click', async () => {
     on = !on;
     btn.classList.toggle('on', on);
-    state.textContent = on ? 'on' : 'off';
-    if (on) start(); else stop();
+    state.textContent = on ? 'on...' : 'off';
+    if (on) {
+      try {
+        await start();
+        state.textContent = 'onn.classList.remove('on');        state.textContent = 'on';
+      }
+    } else {
+      stop();
+    }
   });
+      } catch(err) {
+        console.error('Audio start failed:', err);
+        state.textContent = 'blocked';
+        on = false;
+
 })();
 
 /* ============================================================
